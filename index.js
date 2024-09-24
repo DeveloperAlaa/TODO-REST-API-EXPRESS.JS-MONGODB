@@ -1,7 +1,13 @@
 const express = require("express");
 const app = express();
 const port = 6060;
+
 const morgan = require("morgan");
+
+// import  mongoose ODM
+const mongoose = require("mongoose");
+
+require("./db");
 
 const usersRoute = require("./routes/users.route");
 
