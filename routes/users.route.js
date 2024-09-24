@@ -1,145 +1,47 @@
 const express = require("express");
-
+const User = require("../models/user");
 const route = express.Router();
 
-const fs = require("node:fs");
-const path = require("node:path");
+route
+  .get("/", async (req, res, next) => {
+    const users = await User.find({});
+    res.send(users);
+  })
 
-const usersFilePath = path.join(__dirname, "../data/users.json");
+  .post("/", async (req, res, next) => {
+    const { email, password } = req.body;
+    // firt way of creating a new document
+    // const newUser = await User.create({email, password})
 
-route.use("/:id", (req, res, next) => {
-  fs.readFile(usersFilePath, (err, data) => {
-    if (err) {
-      const err = new Error("File not found");
-      err.statusCode = 404;
-      return next(err);
-    }
-    const users = JSON.parse(data);
+    // second way of creating a new document
+    const newUser = new User({ email, password });
+    await newUser.save();
+
+    // if you'r planning to send the created, you have to serialize the password
+    // newUser.password = undefined
+    // res.send(newUser);
+
+    res.send("User has been created successfully");
+  });
+
+route
+  .get("/:id", async (req, res, next) => {
     const { id } = req.params;
-    const userIndex = users.findIndex((user) => user.id === +id);
-    let user = users[userIndex];
-    if (!user) {
-      return res.send("User not found ya bro.");
-    }
-
-    const userData = {
-      index: userIndex,
-      body: { ...user },
-    };
-
-    req.userData = userData;
-
-    next();
-  });
-});
-
-route
-  .get("/", (req, res, next) => {
-    fs.readFile(usersFilePath, (err, data) => {
-      if (err) {
-        const err = new Error("File not found");
-        err.statusCode = 404;
-        console.log(err);
-        return next(err);
-      }
-      const users = JSON.parse(data);
-      res.send(users);
-    });
+    const user = await User.findById(id);
+    res.send(user);
   })
 
-  .post("/", (req, res, next) => {
-    fs.readFile(usersFilePath, (err, data) => {
-      if (err) {
-        const err = new Error("File not found");
-        err.statusCode = 404;
-        return next(err);
-      }
-      const users = JSON.parse(data);
-
-      const newUser = {
-        id: Date.now(),
-        ...req.body,
-      };
-
-      users.push(newUser);
-      const usersString = JSON.stringify(users, null, 2);
-      fs.writeFile(usersFilePath, usersString, (err) => {
-        if (err) {
-          next(err);
-          return;
-        }
-      });
-      res.send("User created successfully.");
-    });
-  });
-
-route
-  .get("/:id", (req, res, next) => {
-    fs.readFile(usersFilePath, (err, data) => {
-      if (err) {
-        const err = new Error("File not found");
-        err.statusCode = 404;
-        return next(err);
-      }
-
-      const user = req.userData.body;
-      res.send(user);
-    });
+  .patch("/:id", async (req, res) => {
+    const { id } = req.params;
+    const { email, password } = req.body;
+    await User.findByIdAndUpdate(id, { email, password });
+    res.send("User has been updated successfully.");
   })
 
-  .patch("/:id", (req, res) => {
-    fs.readFile(usersFilePath, (err, data) => {
-      if (err) {
-        const err = new Error("File not found");
-        err.statusCode = 404;
-        return next(err);
-      }
-      const users = JSON.parse(data);
-
-      const userToUpdateIndex = req.userData.index;
-      let userToUpdate = req.userData.body;
-
-      userToUpdate = {
-        ...userToUpdate,
-        ...req.body,
-      };
-
-      users.splice(userToUpdateIndex, 1, userToUpdate);
-      const usersString = JSON.stringify(users, null, 2);
-
-      fs.writeFile(usersFilePath, usersString, (err) => {
-        if (err) {
-          next(err);
-          return;
-        }
-      });
-      res.send("User updated successfully.");
-    });
-  })
-
-  .delete("/:id", (req, res) => {
-    fs.readFile(usersFilePath, (err, data) => {
-      if (err) {
-        const err = new Error("File not found");
-        err.statusCode = 404;
-        return next(err);
-      }
-      const users = JSON.parse(data);
-
-      const userToDeleteIndex = req.userData.index;
-
-      users.splice(userToDeleteIndex, 1);
-      const usersString = JSON.stringify(users, null, 2);
-
-      fs.writeFile(usersFilePath, usersString, (err) => {
-        if (err) {
-          next(err);
-          return;
-        }
-      });
-
-      res.send("User deleted successfully.");
-    });
+  .delete("/:id", async (req, res) => {
+    const { id } = req.params;
+    const user = await User.findByIdAndDelete(id);
+    res.send("User has been deleted successfully.");
   });
 
 module.exports = route;
