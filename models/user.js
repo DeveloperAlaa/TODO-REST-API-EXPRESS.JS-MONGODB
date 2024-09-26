@@ -8,12 +8,12 @@ const userSchema = new Schema({
     required: true,
     lowercase: true,
     unique: true,
-    immutable: true
+    immutable: true,
   },
   password: {
     type: String,
     required: true,
-    select: false,
+    // select: false,
   },
   createdAt: {
     type: Date,
@@ -22,7 +22,8 @@ const userSchema = new Schema({
 });
 
 // create a user model -> create a user collection in the users db
-// in the model method we pass the collection name and the schema
+// in the model method we pass the collection name and the schema.
+// the collection name will named as the plural lowercase of the passed name
 const User = mongoose.model("User", userSchema);
 
 module.exports = User;

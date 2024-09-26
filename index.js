@@ -1,4 +1,6 @@
 const express = require("express");
+// it's a package that automatically handles errors and pass it to the global error handler
+require("express-async-errors")
 const app = express();
 const port = 6060;
 
