@@ -9,8 +9,9 @@ const AppError = require("../utils/AppError");
 const signup = async (req, res, next) => {
   const { email, password } = req.body;
 
-  if (!email || !password)
-    return next(new AppError("Email and password are required.", 400));
+  // this block of code is now useless as we use joi to validate the data comming from the client in the middleware 
+  // if (!email || !password)
+  //   return next(new AppError("Email and password are required.", 400));
 
   // we pass the data, then the salt to be used to hash the password.
   // if specified as a number then a salt will be generated with the specified number of rounds and used
@@ -32,8 +33,9 @@ const signup = async (req, res, next) => {
 const login = async (req, res, next) => {
   const { email, password } = req.body;
 
-  if (!email || !password)
-    return next(new AppError("Email and password are required.", 400));
+  // this block of code is now useless as we use joi to validate the data comming from the client in the middleware 
+  // if (!email || !password)
+  //   return next(new AppError("Email and password are required.", 400));
 
   // .select("+password") -> Specifies which document fields to include or exclude (also known as the query "projection")
   // we use .select("+password") as we added the property selected: false in the user schema so we override schema-level

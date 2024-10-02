@@ -1,6 +1,8 @@
 const express = require("express");
 const route = express.Router();
 
+const Joi = require("joi");
+
 const {
   signup,
   getSingleUser,
@@ -10,22 +12,28 @@ const {
   login,
 } = require("../controllers/users.controller");
 
+const {
+  signupValidator,
+  loginValidator,
+} = require("../middlewares/authenticationValidator");
+
 // import the user model
 const User = require("../models/user");
 
 const AppError = require("../utils/AppError");
 
-route
-  .get("/", getAllUsers)
+route.get("/", getAllUsers);
 
-  .post("/", signup)
+route.post("/", signupValidator, signup);
 
-  .post("/login", login)
+// validation for the data comming from the client using joi for the login resource
 
-  .get("/:id", getSingleUser)
+route.post("/login", loginValidator, login);
 
-  .patch("/:id", updateUser)
+route.get("/:id", getSingleUser);
 
-  .delete("/:id", deleteUser);
+route.patch("/:id", updateUser);
+
+route.delete("/:id", deleteUser);
 
 module.exports = route;

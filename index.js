@@ -35,10 +35,12 @@ app.use((err, req, res, next) => {
 
   const statusCode = err?.statusCode || 500;
   const errorMessage = err?.message || "Internal Server Error.";
+  const errors = err?.errors || []
 
   res.status(statusCode).send({
     status: statusCode,
     message: errorMessage,
+    errors: errors
   });
 });
 
