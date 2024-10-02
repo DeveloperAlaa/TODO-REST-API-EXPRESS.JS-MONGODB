@@ -8,7 +8,7 @@ const {
   deleteUser,
   getAllUsers,
   login,
-} = require("../controllers/authentication.controller");
+} = require("../controllers/users.controller");
 
 // import the user model
 const User = require("../models/user");
