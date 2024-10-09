@@ -7,11 +7,15 @@ const {
   getSingleTodo,
   updateTodo,
   deleteTodo,
-} = require("../controllers/users.controller");
+} = require("../controllers/todos.controller");
 
-route.get("/", getAllTodos);
+const todoValidator = require("../middlewares/todoValidator");
 
-route.post("/", createTodo);
+const verifyToken = require("../middlewares/verifyToken");
+
+route.get("/", verifyToken, getAllTodos);
+
+route.post("/", verifyToken, todoValidator, createTodo);
 
 route.get("/:id", getSingleTodo);
 

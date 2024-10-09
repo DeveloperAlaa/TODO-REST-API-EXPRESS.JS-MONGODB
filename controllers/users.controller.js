@@ -1,8 +1,8 @@
 // import the user model
 const User = require("../models/user");
 
-// import bcrypt to encrypt sensitive data
-const bcrypt = require("bcrypt");
+// a package responsible for generating json web tokens
+const jwt = require("jsonwebtoken")
 
 const AppError = require("../utils/AppError");
 
@@ -49,7 +49,10 @@ const login = async (req, res, next) => {
   // if you're sending the user, you have to serialize the password bfore sending it to the client for security
   user.password = undefined;
 
-  res.send(user);
+  // we pass in the payload, the secret and the the option of expire date
+  const token = jwt.sign({id: user._id}, "mySecret", {expiresIn: "1d"})
+  
+  res.send({token, user});
 };
 
 const getAllUsers = async (req, res, next) => {

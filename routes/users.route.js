@@ -1,8 +1,5 @@
 const express = require("express");
 const route = express.Router();
-
-const Joi = require("joi");
-
 const {
   signup,
   getSingleUser,

@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
+// import bcrypt to encrypt sensitive data
 const bcrypt = require("bcrypt");
 
 // create a user schema -> specify how a single user object will be

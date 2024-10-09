@@ -9,11 +9,12 @@ require("express-async-errors");
 const morgan = require("morgan");
 
 // import  mongoose ODM
-const mongoose = require("mongoose");
+// const mongoose = require("mongoose");
 
 require("./db");
 
 const usersRoute = require("./routes/users.route");
+const todosRoute = require("./routes/todos.route");
 
 // a middleware that serves static files from inside a root directory
 // app.use(express.static("public"));
@@ -22,12 +23,16 @@ const usersRoute = require("./routes/users.route");
 app.use(express.json());
 
 // a middleware that parses incoming requests with urlencoded payloads (from the browser)
-app.use(express.urlencoded());
+app.use(express.urlencoded({extended: false}));
 
 // for logging
 app.use(morgan("combined"));
 
+// users resource
 app.use("/users", usersRoute);
+
+// todos resource
+app.use("/todos", todosRoute);
 
 // global error handler
 app.use((err, req, res, next) => {
@@ -35,12 +40,12 @@ app.use((err, req, res, next) => {
 
   const statusCode = err?.statusCode || 500;
   const errorMessage = err?.message || "Internal Server Error.";
-  const errors = err?.errors || []
+  const errors = err?.errors || [];
 
   res.status(statusCode).send({
     status: statusCode,
     message: errorMessage,
-    errors: errors
+    errors: errors,
   });
 });
 
