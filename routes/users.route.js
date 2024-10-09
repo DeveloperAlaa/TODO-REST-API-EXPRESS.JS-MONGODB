@@ -17,10 +17,6 @@ const {
   loginValidator,
 } = require("../middlewares/authenticationValidator");
 
-// import the user model
-const User = require("../models/user");
-
-const AppError = require("../utils/AppError");
 
 route.get("/", getAllUsers);
 
