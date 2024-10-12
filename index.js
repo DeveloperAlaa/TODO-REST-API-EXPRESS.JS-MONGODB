@@ -1,12 +1,21 @@
 const express = require("express");
 const app = express();
 
-const port = 6060;
+// then we create a .env file to put in it the data we don't want to upload on github
+// we add the dotenv pakage to handle the enviroment varialbles to protect sensetive data
+require("dotenv").config()
+
+const port = process.env.PORT || 6060
 
 // it's a package that automatically handles errors and pass it to the global error handler
 require("express-async-errors");
 
 const morgan = require("morgan");
+
+// CROSS ORIGIN RESOURCE SHARING(cors):- is an http header based mechanism 
+// it defines who can access the api resources on the browsers  
+const cors = require("cors")
+app.use(cors())
 
 // import  mongoose ODM
 // const mongoose = require("mongoose");
@@ -23,7 +32,7 @@ const todosRoute = require("./routes/todos.route");
 app.use(express.json());
 
 // a middleware that parses incoming requests with urlencoded payloads (from the browser)
-app.use(express.urlencoded({extended: false}));
+app.use(express.urlencoded({extended: false})); 
 
 // for logging
 app.use(morgan("combined"));

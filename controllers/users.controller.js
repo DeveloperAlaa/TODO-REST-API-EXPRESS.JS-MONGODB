@@ -50,7 +50,7 @@ const login = async (req, res, next) => {
   user.password = undefined;
 
   // we pass in the payload, the secret and the the option of expire date
-  const token = jwt.sign({id: user._id}, "mySecret", {expiresIn: "1d"})
+  const token = jwt.sign({id: user._id}, process.env.JWT_SECRET, {expiresIn: "1d"})
   
   res.send({token, user});
 };
@@ -106,7 +106,3 @@ module.exports = {
   login,
 };
 
-
-
-
-Buffer.from("eyJhbGciOiJIUzI1Nils1nR5cC161kpXVCJ9.eyJpZCI6MX0", "base64").toString() 
