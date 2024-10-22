@@ -13,7 +13,6 @@ module.exports = async (req, res, next) => {
   const user = await User.findById(id);
   if (!user) return next(new AppError("User was not found token", 404));
   // we attatch the user to the request object
-  console.log("user----> ", user)
   req.user = user;
   next();
 };

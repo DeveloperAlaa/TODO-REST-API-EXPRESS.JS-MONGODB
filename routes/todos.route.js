@@ -17,10 +17,10 @@ route.get("/", verifyToken, getAllTodos);
 
 route.post("/", verifyToken, todoValidator, createTodo);
 
-route.get("/:id", getSingleTodo);
+route.get("/:id", verifyToken, getSingleTodo);
 
-route.patch("/:id", updateTodo);
+route.patch("/:id", verifyToken, updateTodo);
 
-route.delete("/:id", deleteTodo);
+route.delete("/:id", verifyToken, deleteTodo);
 
 module.exports = route;
