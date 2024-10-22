@@ -29,7 +29,10 @@ const userSchema = new Schema({
 userSchema.pre("save", async function () {
   const currentDocument = this;
   if (currentDocument.isModified("password")) {
-    const hashedPassword = await bcrypt.hash(currentDocument.password, 10);
+    const hashedPassword = await bcrypt.hash(
+      currentDocument.password,
+      Number(process.env.SALT)
+    );
     currentDocument.password = hashedPassword;
   }
 });
